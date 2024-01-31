@@ -1,0 +1,58 @@
+#include <iostream>
+#include <typeinfo>  // Include for std::typeid
+
+// Meta-function to remove constness
+template <typename T>
+struct remove_const {
+    using type = T;
+};
+
+template <typename T>
+struct remove_const<const T> {
+    using type = T;
+};
+
+// Meta-function to remove modifiers
+template <typename T>
+struct remove_modifier {
+    using type = T;
+};
+
+template <typename T>
+struct remove_modifier<T*> {
+    using type = typename remove_modifier<T>::type;
+};
+
+template <typename T>
+struct remove_modifier<T&> {
+    using type = typename remove_modifier<T>::type;
+};
+
+template <typename T, size_t N>
+struct remove_modifier<T[N]> {
+    using type = typename remove_modifier<T>::type;
+};
+
+template <typename T>
+using remove_const_t = typename remove_const<T>::type;
+
+template <typename T>
+using remove_modifier_t = typename remove_modifier<T>::type;
+
+int main() {
+    const int value = 10;
+
+    std::cout << "Original Type: const int" << std::endl;
+    std::cout << "Type without const: " << typeid(remove_const_t<decltype(value)>).name() << std::endl;
+    std::cout << std::endl;
+
+    const int* ptr = &value;
+
+
+    std::cout << "Original Type: int*" << std::endl;
+    std::cout << "Type without modifiers: " << typeid(remove_modifier_t<decltype(ptr)>).name() << std::endl;
+    std::cout << std::endl;
+
+    return 0;
+}
+

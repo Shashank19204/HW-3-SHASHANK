@@ -1,0 +1,23 @@
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+// Use the built-in pow function for efficiency
+int sum(int p, int q) {
+    int result = 0;
+    for (int i = 1; i <= q; ++i) {
+        result += pow(p, i);  // Use pow from <cmath>
+    }
+    return result;
+}
+
+int main() {
+    int p, q;
+    cout << "Enter the value of p: ";
+    cin >> p;
+    cout << "Enter the value of q: ";
+    cin >> q;
+    int result = sum(p, q);
+    cout << "Sum of the sequence F(" << p << ", " << q << ") = " << result << endl;
+    return 0;
+}
